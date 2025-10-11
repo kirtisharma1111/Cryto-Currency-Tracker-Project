@@ -3,17 +3,17 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchCoinData } from "../../services/fetchCoinData";
 import { useState } from "react"; // ✅ Add this line
 
-function CoinTable(){
+function CoinTable({currency}){
     const [page,setPage] = useState(1);
    const { data, isLoading, isError, error } = useQuery({
-  queryKey: ['coins', page],
-  queryFn: () => fetchCoinData(page, 'usd'),
+   queryKey: ['coins', page, currency],  //based on page and currency changes occue
+  queryFn: () => fetchCoinData(page, currency),
 //   retry: 2,
 //   retryDelay: 1000,
-  gcTime: 1000 * 60 * 2, // In v5, cacheTime → gcTime
+ gcTime: 1000 * 60 * 2, // In v5, cacheTime → gcTime
 //   only give api to fresh data .
 // if we have to go in previous, then api doesn't come again
-  staleTime: 1000* 60 * 2,
+staleTime: 1000* 60 * 2,
 });
 
     if(isError){
@@ -22,7 +22,7 @@ function CoinTable(){
     
 
    return(
-    <div className="my-5 flex flex-col items-center justify-center gap-5 w-[80vw] mx-auto">
+    <div className="my-5 flex flex-col items-center justify-center gap-5 w-[80vw] mx-auto">{currency}
         <div className="w-full bg-yellow-400 text-black flex py-2 px-2 font-semibold items-center justify-center">
             {/* Header of the table */}
             <div className="basis-[35%]">
