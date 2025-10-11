@@ -1,7 +1,33 @@
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { fetchCoinData } from "../../services/fetchCoinData";
+
 function CoinTable(){
+    const [page,setPage] = useState(1);
+   const { data, isLoading, isError, error } = useQuery({
+  queryKey: ['coins', page],
+  queryFn: () => fetchCoinData(page, 'usd'),
+  retry: 2,
+  retryDelay: 1000,
+  gcTime: 1000 * 60 * 2, // In v5, cacheTime → gcTime
+});
+
+    useEffect(()=>{
+        console.log(data);
+    },[data]);
+    if(isLoading){
+        return <div>Loading...</div>
+    }
+    if(isError){
+        return <div>Error: {error.message}</div>
+    }
+    
+
    return(
     <>
-    CoinTable
+    CoinTable 
+    <button onClick={()=> setPage(page+1)}>Click</button>
+    {page}
     </>
    );
 }
