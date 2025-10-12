@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 // import { useEffect, useState } from "react";
 import { fetchCoinData } from "../../services/fetchCoinData";
-import { useState } from "react"; // ✅ Add this line
+import { useContext, useState } from "react"; // ✅ Add this line
+import { CurrencyContext } from "../../context/CurrencyContext";
 
-function CoinTable({currency}){
+function CoinTable(){
+    const {currency} = useContext(CurrencyContext);
     const [page,setPage] = useState(1);
    const { data, isLoading, isError, error } = useQuery({
    queryKey: ['coins', page, currency],  //based on page and currency changes occue
