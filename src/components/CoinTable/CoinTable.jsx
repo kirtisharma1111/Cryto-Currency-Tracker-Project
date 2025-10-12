@@ -5,6 +5,7 @@ import { useState } from "react"; // ✅ Add this line
 // import { CurrencyContext } from "../../context/CurrencyContext";
 import currencyStore from '../../zustand/zustand'
 import { useNavigate } from "react-router-dom";
+import PageLoader from "../PageLoader/PageLoader";
 
 function CoinTable(){
 
@@ -31,6 +32,9 @@ function handleCoinRedirect(id){
 
     if(isError){
         return <div>Error: {error.message}</div>
+    }
+    if(isLoading){
+        return <PageLoader />
     }
     
 
