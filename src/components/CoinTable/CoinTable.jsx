@@ -1,12 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 // import { useEffect, useState } from "react";
 import { fetchCoinData } from "../../services/fetchCoinData";
-import { useContext, useState } from "react"; // ✅ Add this line
-import { CurrencyContext } from "../../context/CurrencyContext";
+import { useState } from "react"; // ✅ Add this line
+// import { CurrencyContext } from "../../context/CurrencyContext";
+import currencyStore from '../../zustand/zustand'
+import { useNavigate } from "react-router-dom";
 
 function CoinTable(){
-    const {currency} = useContext(CurrencyContext);
+
+    // const {currency} = useContext(CurrencyContext);
+    const {currency} = currencyStore();
+    const navigate = useNavigate();
     const [page,setPage] = useState(1);
+
    const { data, isLoading, isError, error } = useQuery({
    queryKey: ['coins', page, currency],  //based on page and currency changes occue
   queryFn: () => fetchCoinData(page, currency),
@@ -17,6 +23,11 @@ function CoinTable(){
 // if we have to go in previous, then api doesn't come again
 staleTime: 1000* 60 * 2,
 });
+function handleCoinRedirect(id){
+    navigate(`/details/${id}`);
+}
+
+
 
     if(isError){
         return <div>Error: {error.message}</div>
@@ -44,7 +55,7 @@ staleTime: 1000* 60 * 2,
             {isLoading && <div>Loading...</div>}
             {data && data.map((coin)=>{
                 return(
-                    <div key={coin.id} className="w-full bg-transparent text-white flex py-4 px-2 font-semibold items-center justify-between">
+                    <div onClick={()=> handleCoinRedirect(coin.id)} key={coin.id} className="w-full bg-transparent text-white flex py-4 px-2 font-semibold items-center justify-between cursor-pointer">
                         <div className="flex items-center justify-start gap-3 basis-[35%]">
                             <div className="w-[5rem] h-[5rem]">
                                 <img src={coin.image} className="w-full h-full"/>
