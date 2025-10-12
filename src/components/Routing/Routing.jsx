@@ -5,12 +5,14 @@ import MainLayout from "../../pages/Layout"; // Layout with Navbar + Outlet
 import { lazy, Suspense } from "react";
 // import {Facebook} from "react-content-loader";
 import PageLoader from "../PageLoader/PageLoader"
+import CustomErrorBoundary from "../CustomErrorBoundary/CustomErrorBoundary";
 
 const Home = lazy(()=>import('../../pages/Home'));
 const CoinDetailsPage = lazy(()=> import('../../pages/CoinDetailsPage'));
 function Routing() {
   return (
-    <Routes>
+   <CustomErrorBoundary>
+     <Routes>
       {/* Main layout wraps pages with Navbar */}
       <Route path="/" element={<MainLayout />}>
         <Route index element={
@@ -26,6 +28,7 @@ function Routing() {
             
       </Route>
     </Routes>
+   </CustomErrorBoundary>
   );
 }
 
